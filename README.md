@@ -5,7 +5,7 @@
 ### github 协作
 
 更新：
-首先在本地建立同名文件夹Agenda-Go，然后使用init，使用git pull同步本地代码库
+首先在本地建立同名文件夹Agenda-Go（或者git clone？），然后使用init，使用git pull同步本地代码库
 
 提交：
 ```
