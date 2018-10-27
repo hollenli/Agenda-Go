@@ -197,21 +197,22 @@ func createMeeting(t string, s string, st string, et string, p []string) bool {
 }
 
 func deleteMeeting(t string, name string) int {
-	if !usernameCheck(name) {
-		return 2
-	}
-	pos := meetingCheck(t)
-	if total_meeting[pos].Sponsor == name {
-		total_meeting[pos] = total_meeting[len(total_meeting)-1]
-		total_meeting = total_meeting[0 : len(total_meeting)-1]
-		return 0
+	if usernameCheck(name) {
+		pos := meetingCheck(t)
+		if total_meeting[pos].Sponsor == name {
+			total_meeting[pos] = total_meeting[len(total_meeting)-1]
+			total_meeting = total_meeting[0 : len(total_meeting)-1]
+			return 0
+		} else {
+			return 1
+		}
 	} else {
-		return 1
+		return 2
 	}
 }
 
 func addMeetingParticipant(t string, player string) int {
-	if !usernameCheck(player) {
+	if usernameCheck(player) {
 		pos := meetingCheck(t)
 		if pos == -1 {
 			return 1
@@ -224,7 +225,7 @@ func addMeetingParticipant(t string, player string) int {
 }
 
 func deleteMeetingParticipant(t string, player string) int {
-	if !usernameCheck(player) {
+	if usernameCheck(player) {
 		pos := meetingCheck(t)
 		if pos == -1 {
 			return 1
