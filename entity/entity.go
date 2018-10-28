@@ -1,6 +1,6 @@
 //provide interface of the operation on data
 /* warning: without fully test */
-package data
+package entity
 
 import (
 	"encoding/json"
