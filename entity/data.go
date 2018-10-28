@@ -197,7 +197,7 @@ func createMeeting(t string, s string, st string, et string, p []string) bool {
 }
 
 func deleteMeeting(t string, name string) int {
-	if usernameCheck(name) {
+	if name == "" || usernameCheck(name) {
 		pos := meetingCheck(t)
 		if total_meeting[pos].Sponsor == name {
 			total_meeting[pos] = total_meeting[len(total_meeting)-1]
@@ -245,6 +245,20 @@ func deleteMeetingParticipant(t string, player string) int {
 			} else {
 				total_meeting[pos].Participant[i] = total_meeting[pos].Participant[size-1]
 				total_meeting[pos].Participant = total_meeting[pos].Participant[0 : size-1]
+			}
+		}
+		return 0
+	} else {
+		return 2
+	}
+}
+
+func deleteAllMeeting(name string, meetingId []string) int {
+	if usernameCheck(name) {
+		for i := 0; i < len(meetingId); i++ {
+			flag := deleteMeeting(meetingId[i], "")
+			if flag != 0 {
+				return flag
 			}
 		}
 		return 0
