@@ -1,6 +1,7 @@
 //provide interface of the operation on data
 /* warning: without fully test */
-package data
+/* remember to tell me if there are bugs */
+package entity
 
 import (
 	"encoding/json"
@@ -197,21 +198,22 @@ func createMeeting(t string, s string, st string, et string, p []string) bool {
 }
 
 func deleteMeeting(t string, name string) int {
-	if !usernameCheck(name) {
-		return 2
-	}
-	pos := meetingCheck(t)
-	if total_meeting[pos].Sponsor == name {
-		total_meeting[pos] = total_meeting[len(total_meeting)-1]
-		total_meeting = total_meeting[0 : len(total_meeting)-1]
-		return 0
+	if name == "" || usernameCheck(name) {
+		pos := meetingCheck(t)
+		if total_meeting[pos].Sponsor == name {
+			total_meeting[pos] = total_meeting[len(total_meeting)-1]
+			total_meeting = total_meeting[0 : len(total_meeting)-1]
+			return 0
+		} else {
+			return 1
+		}
 	} else {
-		return 1
+		return 2
 	}
 }
 
 func addMeetingParticipant(t string, player string) int {
-	if !usernameCheck(player) {
+	if usernameCheck(player) {
 		pos := meetingCheck(t)
 		if pos == -1 {
 			return 1
@@ -224,7 +226,7 @@ func addMeetingParticipant(t string, player string) int {
 }
 
 func deleteMeetingParticipant(t string, player string) int {
-	if !usernameCheck(player) {
+	if usernameCheck(player) {
 		pos := meetingCheck(t)
 		if pos == -1 {
 			return 1
@@ -244,6 +246,20 @@ func deleteMeetingParticipant(t string, player string) int {
 			} else {
 				total_meeting[pos].Participant[i] = total_meeting[pos].Participant[size-1]
 				total_meeting[pos].Participant = total_meeting[pos].Participant[0 : size-1]
+			}
+		}
+		return 0
+	} else {
+		return 2
+	}
+}
+
+func deleteAllMeeting(name string, meetingId []string) int {
+	if usernameCheck(name) {
+		for i := 0; i < len(meetingId); i++ {
+			flag := deleteMeeting(meetingId[i], "")
+			if flag != 0 {
+				return flag
 			}
 		}
 		return 0
