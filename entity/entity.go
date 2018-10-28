@@ -31,25 +31,25 @@ var (
 	meetingLib    string = "meeting.json"
 )
 
-func init() {
+func Init() {
 	readUserFile()
 	readMeetingFile()
 }
 
-func updataLib() {
+func UpdataLib() {
 	writeUserFile()
 	writeMeetingFile()
 }
 
-func getAllUser() []User {
+func GetAllUser() []User {
 	return total_user
 }
 
-func getAllMeeting() []Meeting {
+func GetAllMeeting() []Meeting {
 	return total_meeting
 }
 
-func readUserFile() {
+func ReadUserFile() {
 	file, err := os.Open(userLib)
 	if err != nil {
 		return
@@ -70,7 +70,7 @@ func readUserFile() {
 	}
 }
 
-func readMeetingFile() {
+func ReadMeetingFile() {
 	file, err := os.Open(meetingLib)
 	if err != nil {
 		return
@@ -92,7 +92,7 @@ func readMeetingFile() {
 	}
 }
 
-func writeUserFile() {
+func WriteUserFile() {
 	userRec, err := json.Marshal(total_user)
 	if err != nil {
 		fmt.Println(err)
@@ -102,7 +102,7 @@ func writeUserFile() {
 	f.WriteString(string(userRec))
 }
 
-func writeMeetingFile() {
+func WriteMeetingFile() {
 	meetingRec, err := json.Marshal(total_user)
 	if err != nil {
 		fmt.Println(err)
@@ -112,7 +112,7 @@ func writeMeetingFile() {
 	f.WriteString(string(meetingRec))
 }
 
-func isUserExist_Login(name string, psw string) bool {
+func IsUserExist_Login(name string, psw string) bool {
 	for i := 0; i < len(total_user); i++ {
 		if total_user[i].Username == name && total_user[i].Password == psw {
 			return true
@@ -121,7 +121,7 @@ func isUserExist_Login(name string, psw string) bool {
 	return false
 }
 
-func userCheck(new_user User) bool {
+func UserCheck(new_user User) bool {
 	for i := 0; i < len(total_user); i++ {
 		if total_user[i].Username == new_user.Username {
 			return false
@@ -130,7 +130,7 @@ func userCheck(new_user User) bool {
 	return true
 }
 
-func usernameCheck(name string) bool {
+func UsernameCheck(name string) bool {
 	for i := 0; i < len(total_user); i++ {
 		if total_user[i].Username == name {
 			return true
@@ -139,7 +139,7 @@ func usernameCheck(name string) bool {
 	return false
 }
 
-func createUser(name string, psw string, ma string, ph string) int {
+func CreateUser(name string, psw string, ma string, ph string) int {
 	user := User{
 		Username: name,
 		Password: psw,
@@ -161,7 +161,7 @@ func createUser(name string, psw string, ma string, ph string) int {
 	}
 }
 
-func deleteUser(name string) bool {
+func DeleteUser(name string) bool {
 	var i int
 	for i = 0; i < len(total_user); i++ {
 		if total_user[i].Username == name {
@@ -173,7 +173,7 @@ func deleteUser(name string) bool {
 	return true
 }
 
-func meetingCheck(t string) int {
+func MeetingCheck(t string) int {
 	for i := 0; i < len(total_meeting); i++ {
 		if total_meeting[i].Title == t {
 			return i
@@ -182,7 +182,7 @@ func meetingCheck(t string) int {
 	return -1
 }
 
-func createMeeting(t string, s string, st string, et string, p []string) bool {
+func CreateMeeting(t string, s string, st string, et string, p []string) bool {
 	if len(p) == 0 {
 		return false
 	}
@@ -197,7 +197,7 @@ func createMeeting(t string, s string, st string, et string, p []string) bool {
 	return true
 }
 
-func deleteMeeting(t string, name string) int {
+func DeleteMeeting(t string, name string) int {
 	if name == "" || usernameCheck(name) {
 		pos := meetingCheck(t)
 		if total_meeting[pos].Sponsor == name {
@@ -212,7 +212,7 @@ func deleteMeeting(t string, name string) int {
 	}
 }
 
-func addMeetingParticipant(t string, player string) int {
+func AddMeetingParticipant(t string, player string) int {
 	if usernameCheck(player) {
 		pos := meetingCheck(t)
 		if pos == -1 {
@@ -225,7 +225,7 @@ func addMeetingParticipant(t string, player string) int {
 	}
 }
 
-func deleteMeetingParticipant(t string, player string) int {
+func DeleteMeetingParticipant(t string, player string) int {
 	if usernameCheck(player) {
 		pos := meetingCheck(t)
 		if pos == -1 {
@@ -254,7 +254,7 @@ func deleteMeetingParticipant(t string, player string) int {
 	}
 }
 
-func deleteAllMeeting(name string, meetingId []string) int {
+func DeleteAllMeeting(name string, meetingId []string) int {
 	if usernameCheck(name) {
 		for i := 0; i < len(meetingId); i++ {
 			flag := deleteMeeting(meetingId[i], "")
