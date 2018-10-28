@@ -1,5 +1,6 @@
 //provide interface of the operation on data
 /* warning: without fully test */
+/* remember to tell me if there are bugs */
 package entity
 
 import (
