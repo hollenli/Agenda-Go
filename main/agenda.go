@@ -15,8 +15,7 @@
 package main
 
 
-import "./cmd"
-import "entity"
+import "github.com/Agenda-Go/cmd"
 
 func main() {
 	cmd.Execute()
