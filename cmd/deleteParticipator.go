@@ -15,8 +15,9 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	entity "github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -31,13 +32,27 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deleteParticipator called")
+		log.Println("deleteParticipator called")
+		title, _ := cmd.Flags().GetString("title")
+		parti, _ := cmd.Flags().GetString("participator")
+		entity.Init()
+		p := entity.DeleteMeetingParticipators(title, parti)
+		if p == 0 {
+			log.Println("Delete participator " + parti + " successfully")
+			entity.UpdateLib()
+		} else if p == 1 {
+			log.Println("No meeting or " + parti + " is not a participator")
+		} else {
+			log.Println("No user call " + parti)
+		}
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deleteParticipatorCmd)
-
+	deleteParticipatorCmd.Flags().StringP("title", "t", "", "")
+	deleteParticipatorCmd.Flags().StringP("participator", "p", "", "")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
