@@ -15,7 +15,9 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
+
+	entity "github.com/Agenda-Go/entity"
 
 	"github.com/spf13/cobra"
 )
@@ -31,7 +33,17 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deleteUser called")
+		log.Println("deleteUser called")
+		entity.Init()
+		if entity.GetCurrentUser() == "" {
+			log.Println("Please log in first")
+		} else {
+			log.Println("Delete user " + entity.GetCurrentUser() + " successfully")
+			entity.DeleteAllMeeting(entity.GetCurrentUser())
+			entity.DeleteUser(entity.GetCurrentUser())
+			entity.SetCurrentUser("")
+			entity.UpdateLib()
+		}
 	},
 }
 

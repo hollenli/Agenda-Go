@@ -15,8 +15,8 @@
 package cmd
 
 import (
-	"fmt"
-
+	"log" 
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -31,20 +31,27 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("register called")
+		u , _:= cmd.Flags().GetString("username") 
+		p , _:= cmd.Flags().GetString("password") 
+		e , _:= cmd.Flags().GetString("email") 
+		t , _:= cmd.Flags().GetString("telephone") 
+		if entity.CreateUser(u , p , e ,t) == 0 {
+			entity.UpdateLib()
+			log.Println("register succesfully")
+			log.Println("username is " + u + " password is " + p + " email is " + e + " telethone is " + t)
+		}else if entity.CreateUser(u , p , e ,t) == 1{
+			log.Println("create user failed")
+		}else if entity.CreateUser(u , p , e ,t) == 2{
+			log.Println("username repeat")
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(registerCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// registerCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// registerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	entity.Init()
+	registerCmd.Flags().StringP("username", "u", "", "")
+	registerCmd.Flags().StringP("password", "p", "", "")
+	registerCmd.Flags().StringP("email", "e", "", "")
+	registerCmd.Flags().StringP("telephone", "t", "", "")
 }

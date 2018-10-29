@@ -15,8 +15,8 @@
 package cmd
 
 import (
-	"fmt"
-
+	"log"
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -31,20 +31,61 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("createMeeting called")
+		nowUser := entity.GetCurrentUser() 
+		if nowUser== "" {
+			log.Println("create meeting failed , you haven't logged in" )
+		}else{
+			nowStr := ""
+			var participators []string	
+			t , _:= cmd.Flags().GetString("title") 
+			p , _:= cmd.Flags().GetString("participator") 
+			s , _:= cmd.Flags().GetString("start") 
+			e , _:= cmd.Flags().GetString("end") 
+			for i := 0; i < len(p); i++{
+				if p[i] == ','{
+					participators = append(participators , nowStr)
+					nowStr = ""
+				}else{
+					nowStr += string(p[i])
+				}
+			}
+			participators = append(participators , nowStr)
+			if !entity.CheckDateValid( entity.StrToDate(s) ){
+				log.Println("start time is not vaild" )
+			}else if !entity.CheckDateValid( entity.StrToDate(e) ){
+				log.Println("end time is not valid")
+			}else if s > e{
+				log.Println("start time must be not bigger than end time")
+			}else if entity.MeetingCheck(t) != -1 {
+				log.Println("the meeting title is repeat")
+			}else{
+				canCreate := true
+				if !entity.CheckUserFreeTime(nowUser, s  , e)  {
+					log.Println("sponsor " + nowUser + " have meeting during this period ")
+					canCreate = false
+				}
+				for i := 0; i < len(participators); i++ {
+					if !entity.CheckUserFreeTime(participators[i] , s  , e)  {
+						log.Println("participator " + participators[i] + " have meeting during this period ")
+						canCreate = false
+					}
+				}
+				if canCreate{
+					log.Println("create Meeting succesfully ")
+					entity.CreateMeeting(t , nowUser , s , e , participators)
+					entity.UpdateLib()
+				}
+			}
+		}
+		
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(createMeetingCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createMeetingCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createMeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	entity.Init()
+	createMeetingCmd.Flags().StringP("title", "t", "", "")
+	createMeetingCmd.Flags().StringP("participator", "p", "", "")
+	createMeetingCmd.Flags().StringP("start", "s", "", "")
+	createMeetingCmd.Flags().StringP("end", "e", "", "")
 }
