@@ -65,3 +65,23 @@ func (meeting *Meeting) isParticipator(n string) int {
 	}
 	return -1
 }
+
+func (meeting *Meeting) addParticipator(name string) bool {
+	if meeting.isParticipator(name) == -1 {
+		meeting.Participators = append(meeting.Participators, name)
+		return true
+	} else {
+		return false
+	}
+}
+
+func (meeting *Meeting) removeParticipator(name string) bool {
+	pos := meeting.isParticipator(name)
+	if pos != -1 {
+		meeting.Participators[pos] = meeting.Participators[len(meeting.Participators)-1]
+		meeting.Participators = meeting.Participators[0 : len(meeting.Participators)-1]
+		return true
+	} else {
+		return false
+	}
+}
