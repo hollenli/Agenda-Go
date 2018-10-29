@@ -34,7 +34,8 @@ to quickly create a Cobra application.`,
 		if entity.GetCurrentUser() != "" {
 			entity.SetCurrentUser("")
 			entity.UpdateLib()
-			log.Println("logout succesfully")
+
+			log.Println(entity.GetCurrentUser()  + "logout succesfully")
 		}else{
 			log.Println("logout failed , you haven't logged in")
 		}
