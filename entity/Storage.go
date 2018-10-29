@@ -32,6 +32,14 @@ func UpdateLib() {
 	WriteCurrentUserFile()
 }
 
+func GetCurrentUser() string {
+	return current_user
+}
+
+func SetCurrentUser(n string) {
+	current_user = n
+}
+
 func GetAllUser() []User {
 	return total_user
 }
