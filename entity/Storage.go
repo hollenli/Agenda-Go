@@ -26,7 +26,7 @@ func Init() {
 	ReadCurrentUser()
 }
 
-func UpdataLib() {
+func UpdateLib() {
 	WriteUserFile()
 	WriteMeetingFile()
 	WriteCurrentUserFile()
@@ -111,7 +111,7 @@ func WriteUserFile() {
 }
 
 func WriteMeetingFile() {
-	meetingRec, err := json.Marshal(total_user)
+	meetingRec, err := json.Marshal(total_meeting)
 	if err != nil {
 		fmt.Println(err)
 	}
