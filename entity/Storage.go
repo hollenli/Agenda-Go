@@ -9,22 +9,8 @@ import (
 	"os"
 )
 
-type User struct {
-	Username string
-	Password string
-	Mail     string
-	Phone    string
-}
-
-type Meeting struct {
-	Title       string
-	Sponsor     string
-	StartTime   string
-	EndTime     string
-	Participant []string
-}
-
 var (
+	current_user  User
 	total_user    []User
 	total_meeting []Meeting
 	userLib       string = "user.json"
@@ -32,13 +18,13 @@ var (
 )
 
 func Init() {
-	readUserFile()
-	readMeetingFile()
+	ReadUserFile()
+	ReadMeetingFile()
 }
 
 func UpdataLib() {
-	writeUserFile()
-	writeMeetingFile()
+	WriteUserFile()
+	WriteMeetingFile()
 }
 
 func GetAllUser() []User {
@@ -146,7 +132,7 @@ func CreateUser(name string, psw string, ma string, ph string) int {
 		Mail:     ma,
 		Phone:    ph,
 	}
-	if userCheck(user) {
+	if UserCheck(user) {
 		_, err := json.Marshal(user)
 
 		if err != nil {
@@ -187,19 +173,19 @@ func CreateMeeting(t string, s string, st string, et string, p []string) bool {
 		return false
 	}
 	meeting := Meeting{
-		Title:       t,
-		Sponsor:     s,
-		StartTime:   st,
-		EndTime:     et,
-		Participant: p,
+		Title:         t,
+		Sponsor:       s,
+		StartTime:     st,
+		EndTime:       et,
+		Participators: p,
 	}
 	total_meeting = append(total_meeting, meeting)
 	return true
 }
 
 func DeleteMeeting(t string, name string) int {
-	if name == "" || usernameCheck(name) {
-		pos := meetingCheck(t)
+	if name == "" || UsernameCheck(name) {
+		pos := MeetingCheck(t)
 		if total_meeting[pos].Sponsor == name {
 			total_meeting[pos] = total_meeting[len(total_meeting)-1]
 			total_meeting = total_meeting[0 : len(total_meeting)-1]
@@ -212,40 +198,35 @@ func DeleteMeeting(t string, name string) int {
 	}
 }
 
-func AddMeetingParticipant(t string, player string) int {
-	if usernameCheck(player) {
-		pos := meetingCheck(t)
+func AddMeetingParticipators(t string, player string) int {
+	if UsernameCheck(player) {
+		pos := MeetingCheck(t)
 		if pos == -1 {
 			return 1
 		}
-		total_meeting[pos].Participant = append(total_meeting[pos].Participant, player)
+		total_meeting[pos].Participators = append(total_meeting[pos].Participators, player)
 		return 0
 	} else {
 		return 2
 	}
 }
 
-func DeleteMeetingParticipant(t string, player string) int {
-	if usernameCheck(player) {
-		pos := meetingCheck(t)
+func DeleteMeetingParticipators(t string, player string) int {
+	if UsernameCheck(player) {
+		pos := MeetingCheck(t)
 		if pos == -1 {
 			return 1
 		}
-		var i, size int = 0, len(total_meeting[pos].Participant)
-		for i = 0; i < size; i++ {
-			if total_meeting[pos].Participant[i] == player {
-				break
-			}
-		}
-		if i == size {
+		i := total_meeting[pos].isParticipator(player)
+		if i == -1 {
 			return 1
 		} else {
-			if len(total_meeting[pos].Participant) == 1 {
+			if len(total_meeting[pos].Participators) == 1 {
 				total_meeting[pos] = total_meeting[len(total_meeting)-1]
 				total_meeting = total_meeting[0 : len(total_meeting)-1]
 			} else {
-				total_meeting[pos].Participant[i] = total_meeting[pos].Participant[size-1]
-				total_meeting[pos].Participant = total_meeting[pos].Participant[0 : size-1]
+				total_meeting[pos].Participators[i] = total_meeting[pos].Participators[size-1]
+				total_meeting[pos].Participators = total_meeting[pos].Participators[0 : size-1]
 			}
 		}
 		return 0
@@ -255,9 +236,9 @@ func DeleteMeetingParticipant(t string, player string) int {
 }
 
 func DeleteAllMeeting(name string, meetingId []string) int {
-	if usernameCheck(name) {
+	if UsernameCheck(name) {
 		for i := 0; i < len(meetingId); i++ {
-			flag := deleteMeeting(meetingId[i], "")
+			flag := DeleteMeeting(meetingId[i], "")
 			if flag != 0 {
 				return flag
 			}
