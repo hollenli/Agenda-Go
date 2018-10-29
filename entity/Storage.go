@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 var (
@@ -96,7 +97,7 @@ func ReadCurrentUser() {
 	if err != nil {
 		return
 	}
-	current_user = line
+	current_user = strings.TrimSpace(line)
 }
 
 func WriteUserFile() {
