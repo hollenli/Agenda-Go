@@ -288,12 +288,13 @@ func DeleteMeetingParticipators(t string, player string) int {
 
 func ClearMeeting(name string) int {
 	if UsernameCheck(name) {
+		var rec []Meeting
 		for i := 0; i < len(total_meeting); i++ {
-			if total_meeting[i].Sponsor == name {
-				DeleteMeeting(total_meeting[i].Title, name)
-				continue
+			if total_meeting[i].Sponsor != name {
+				rec = append(rec, total_meeting[i])
 			}
 		}
+		total_meeting = rec
 		return 0
 	} else {
 		return 2
@@ -302,14 +303,15 @@ func ClearMeeting(name string) int {
 
 func DeleteAllMeeting(name string) int {
 	if UsernameCheck(name) {
+		var rec []string
+		ClearMeeting(name)
 		for i := 0; i < len(total_meeting); i++ {
-			if total_meeting[i].Sponsor == name {
-				DeleteMeeting(total_meeting[i].Title, name)
-				continue
-			}
 			if total_meeting[i].isParticipator(name) != -1 {
-				DeleteMeetingParticipators(total_meeting[i].Title, name)
+				rec = append(rec, total_meeting[i].Title)
 			}
+		}
+		for j := 0; j < len(rec); j++ {
+			DeleteMeetingParticipators(rec[j], name)
 		}
 		return 0
 	} else {

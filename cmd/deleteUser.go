@@ -39,8 +39,9 @@ to quickly create a Cobra application.`,
 			log.Println("Please log in first")
 		} else {
 			log.Println("Delete user " + entity.GetCurrentUser() + " successfully")
-			entity.DeleteUser(entity.GetCurrentUser())
 			entity.DeleteAllMeeting(entity.GetCurrentUser())
+			entity.DeleteUser(entity.GetCurrentUser())
+			entity.SetCurrentUser("")
 			entity.UpdateLib()
 		}
 	},
