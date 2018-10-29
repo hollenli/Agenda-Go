@@ -204,10 +204,28 @@ func MeetingCheck(t string) int {
 	return -1
 }
 
+func CheckUserFreeTime(name, st, et string) bool {
+	var rec []Meeting
+	for i := 0; i < len(total_meeting); i++ {
+		if !(total_meeting[i].EndTime <= st || total_meeting[i].StartTime >= et) {
+			rec = append(rec, total_meeting[i])
+		}
+	}
+	if len(rec) != 0 {
+		for j := 0; j < len(rec); j++ {
+			if rec[j].Sponsor == name || rec[j].isParticipator(name) != -1 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func CreateMeeting(t string, s string, st string, et string, p []string) bool {
 	if len(p) == 0 {
 		return false
 	}
+
 	meeting := Meeting{
 		Title:         t,
 		Sponsor:       s,
