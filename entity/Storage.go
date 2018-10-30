@@ -168,14 +168,7 @@ func CreateUser(name string, psw string, ma string, ph string) int {
 		Phone:    ph,
 	}
 	if UserCheck(user) {
-		_, err := json.Marshal(user)
-
-		if err != nil {
-			return 1
-		}
-
 		total_user = append(total_user, user)
-
 		return 0
 	} else {
 		return 2
@@ -188,6 +181,9 @@ func DeleteUser(name string) bool {
 		if total_user[i].Username == name {
 			break
 		}
+	}
+	if i == len(total_user) {
+		return false
 	}
 	total_user[i] = total_user[len(total_user)-1]
 	total_user = total_user[0 : len(total_user)-1]
@@ -277,19 +273,17 @@ func AddMeetingParticipators(title string, participator string) int {
 func DeleteMeetingParticipators(t string, player string) int {
 	if UsernameCheck(player) {
 		pos := MeetingCheck(t)
-		if pos == -1 {
+		if pos == -1 || total_meeting[pos].Sponsor != current_user {
 			return 1
 		}
-		i := total_meeting[pos].isParticipator(player)
-		if i == -1 {
-			return 1
-		} else {
-			total_meeting[pos].removeParticipator(player)
+		if total_meeting[pos].removeParticipator(player) {
 			if len(total_meeting[pos].Participators) == 0 {
 				DeleteMeeting(total_meeting[pos].Title, current_user)
 			}
+			return 0
+		} else {
+			return 1
 		}
-		return 0
 	} else {
 		return 2
 	}
