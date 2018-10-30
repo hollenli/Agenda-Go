@@ -33,7 +33,7 @@ var addParticipatorCmd = &cobra.Command{
 		switch entity.AddMeetingParticipators(title, participator) {
 		case 0:
 			entity.UpdateLib()
-			log.Printf("User %s participates in meeting %s.", title, participator)
+			log.Printf("User %s participates in meeting %s.", participator, title)
 		case 1:
 			log.Printf("Meeting %s doesn't exit or you are not the sponsor of it.", title)
 		case 2:
