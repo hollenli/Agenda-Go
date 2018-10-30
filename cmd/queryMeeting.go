@@ -16,7 +16,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -24,19 +26,32 @@ import (
 var queryMeetingCmd = &cobra.Command{
 	Use:   "queryMeeting",
 	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long:  "Usage：agenda queryMeeting -s [start time]  -e [end time]",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("queryMeeting called")
+		start, _ := cmd.Flags().GetString("start")
+		end, _ := cmd.Flags().GetString("end")
+		meetings := entity.QueryMeetings(entity.GetCurrentUser(), start, end)
+		fmt.Printf("title\t startTime\tendTime\tsponsor\tparticipators\n")
+		for i := 0; i < len(meetings); i++ {
+			fmt.Printf("%s\t %s\t%s\t%s\t", meetings[i].Title, meetings[i].StartTime, meetings[i].EndTime, meetings[i].Sponsor)
+			for j := 0; j < len(meetings[i].Participators); j++ {
+				fmt.Printf("%s", meetings[i].Participators[j])
+				if j == len(meetings[i].Participators[j])-1 {
+					fmt.Printf("\t\n")
+				} else {
+					fmt.Printf("&")
+				}
+			}
+		}
+		log.Printf("Query meetings of %s.", entity.GetCurrentUser())
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(queryMeetingCmd)
+	entity.Init()
+	queryMeetingCmd.Flags().StringP("start", "s", "", "")
+	queryMeetingCmd.Flags().StringP("end", "e", "", "")
 
 	// Here you will define your flags and configuration settings.
 

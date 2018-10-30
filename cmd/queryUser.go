@@ -16,22 +16,24 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
 // queryUserCmd represents the queryUser command
 var queryUserCmd = &cobra.Command{
 	Use:   "queryUser",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Query the information of all registered users",
+	Long:  "Usage: agenda queryUser",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("queryUser called")
+		users := entity.GetAllUser()
+		fmt.Printf("username\t mail\tphone\n")
+		for i := 0; i < len(users); i++ {
+			fmt.Printf("%s\t %s\t%s\n", users[i].Username, users[i].Mail, users[i].Phone)
+		}
+		log.Println("Query all users.")
 	},
 }
 
