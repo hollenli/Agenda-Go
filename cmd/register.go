@@ -15,7 +15,8 @@
 package cmd
 
 import (
-	"log" 
+	"log"
+
 	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
@@ -23,25 +24,20 @@ import (
 // registerCmd represents the register command
 var registerCmd = &cobra.Command{
 	Use:   "register",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Register a account.",
+	Long:  "Usage :agenda register -u [username]  -p [password] -e [email]  -t [telephone]    ",
 	Run: func(cmd *cobra.Command, args []string) {
-		u , _:= cmd.Flags().GetString("username") 
-		p , _:= cmd.Flags().GetString("password") 
-		e , _:= cmd.Flags().GetString("email") 
-		t , _:= cmd.Flags().GetString("telephone") 
-		if entity.CreateUser(u , p , e ,t) == 0 {
+		u, _ := cmd.Flags().GetString("username")
+		p, _ := cmd.Flags().GetString("password")
+		e, _ := cmd.Flags().GetString("email")
+		t, _ := cmd.Flags().GetString("telephone")
+		if entity.CreateUser(u, p, e, t) == 0 {
 			entity.UpdateLib()
 			log.Println("register succesfully")
 			log.Println("username is " + u + " password is " + p + " email is " + e + " telethone is " + t)
-		}else if entity.CreateUser(u , p , e ,t) == 1{
+		} else if entity.CreateUser(u, p, e, t) == 1 {
 			log.Println("create user failed")
-		}else if entity.CreateUser(u , p , e ,t) == 2{
+		} else if entity.CreateUser(u, p, e, t) == 2 {
 			log.Println("username repeat")
 		}
 	},

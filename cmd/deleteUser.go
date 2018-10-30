@@ -17,21 +17,15 @@ package cmd
 import (
 	"log"
 
-	entity "github.com/Agenda-Go/entity"
-
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
 // deleteUserCmd represents the deleteUser command
 var deleteUserCmd = &cobra.Command{
 	Use:   "deleteUser",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Delete you account",
+	Long:  "Usage：agenda deleteUser",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Println("deleteUser called")
 		entity.Init()
