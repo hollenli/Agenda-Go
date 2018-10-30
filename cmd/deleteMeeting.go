@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"log"
+
 	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
@@ -23,22 +24,17 @@ import (
 // deleteMeetingCmd represents the deleteMeeting command
 var deleteMeetingCmd = &cobra.Command{
 	Use:   "deleteMeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Delete a meeting you sponsored",
+	Long:  "Usage：agenda deleteMeeting -t [title]",
 	Run: func(cmd *cobra.Command, args []string) {
 		nowUser := entity.GetCurrentUser()
-		t , _:= cmd.Flags().GetString("title") 
-		solveResult := entity. DeleteMeeting(t ,  nowUser) 
-		if(solveResult == 0  ){
+		t, _ := cmd.Flags().GetString("title")
+		solveResult := entity.DeleteMeeting(t, nowUser)
+		if solveResult == 0 {
 			log.Println("delete succesfully")
-		}else if(solveResult == 1){
+		} else if solveResult == 1 {
 			log.Println("you are not the sponsor of the meeting or the meeting title is not exist")
-		}else if(solveResult == 2){
+		} else if solveResult == 2 {
 			log.Println("delete failed , you haven't logged in")
 		}
 		entity.UpdateLib()

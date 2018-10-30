@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"log"
+
 	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
@@ -23,22 +24,17 @@ import (
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Log in your account.",
+	Long:  "Usage :agenda login -u [username]  -p [password]",
 	Run: func(cmd *cobra.Command, args []string) {
-		u , _:= cmd.Flags().GetString("username") 
-		p , _:= cmd.Flags().GetString("password") 
-		if entity.IsUserExist_Login(u , p) {
+		u, _ := cmd.Flags().GetString("username")
+		p, _ := cmd.Flags().GetString("password")
+		if entity.IsUserExist_Login(u, p) {
 			log.Println("login succesfully")
 			log.Println("username is " + u + " password is " + p)
 			entity.SetCurrentUser(u)
 			entity.UpdateLib()
-		}else{
+		} else {
 			log.Println("login failed ,username or password is wrong")
 		}
 	},
