@@ -32,25 +32,20 @@ var deleteUserCmd = &cobra.Command{
 		if entity.GetCurrentUser() == "" {
 			log.Println("Please log in first")
 		} else {
-			log.Println("Delete user " + entity.GetCurrentUser() + " successfully")
-			entity.DeleteAllMeeting(entity.GetCurrentUser())
-			entity.DeleteUser(entity.GetCurrentUser())
-			entity.SetCurrentUser("")
-			entity.UpdateLib()
+			flag1 := entity.DeleteAllMeeting(entity.GetCurrentUser())
+			flag2 := entity.DeleteUser(entity.GetCurrentUser())
+			if flag1 == 0 && flag2 {
+				entity.SetCurrentUser("")
+				entity.UpdateLib()
+				log.Println("Delete user " + entity.GetCurrentUser() + " successfully")
+			} else {
+				log.Println("Delete user " + entity.GetCurrentUser() + " failed")
+			}
+
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deleteUserCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deleteUserCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deleteUserCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

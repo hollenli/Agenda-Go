@@ -24,13 +24,8 @@ import (
 // deleteParticipatorCmd represents the deleteParticipator command
 var deleteParticipatorCmd = &cobra.Command{
 	Use:   "deleteParticipator",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Delete participator in a meeting which you sponsored",
+	Long:  `Usage: deleteParticipator -t [title] -p [participator]`,
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Println("deleteParticipator called")
 		title, _ := cmd.Flags().GetString("title")
@@ -53,13 +48,4 @@ func init() {
 	rootCmd.AddCommand(deleteParticipatorCmd)
 	deleteParticipatorCmd.Flags().StringP("title", "t", "", "")
 	deleteParticipatorCmd.Flags().StringP("participator", "p", "", "")
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deleteParticipatorCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deleteParticipatorCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
