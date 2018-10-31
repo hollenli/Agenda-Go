@@ -34,7 +34,7 @@ var registerCmd = &cobra.Command{
 		if entity.CreateUser(u, p, e, t) == 0 {
 			entity.UpdateLib()
 			log.Println("register succesfully")
-			log.Println("username is " + u + " password is " + p + " email is " + e + " telethone is " + t)
+			log.Println("username is " + u + " password is " + p + " email is " + e + " telephone is " + t)
 		} else if entity.CreateUser(u, p, e, t) == 1 {
 			log.Println("create user failed")
 		} else if entity.CreateUser(u, p, e, t) == 2 {
