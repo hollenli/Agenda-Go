@@ -15,23 +15,20 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
 // clearCmd represents the clear command
 var clearCmd = &cobra.Command{
 	Use:   "clear",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Delete all meetings you sponsored.",
+	Long:  "Usage: agenda clear.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("clear called")
+		entity.ClearMeetings(entity.GetCurrentUser())
+		log.Println("Clear completed.")
 	},
 }
 

@@ -15,28 +15,38 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
 // addParticipatorCmd represents the addParticipator command
 var addParticipatorCmd = &cobra.Command{
 	Use:   "addParticipator",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Add a participator to a meeting",
+	Long:  `Usage：agenda addParticipator -t [title]  -p [participator]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("addParticipator called")
+		title, _ := cmd.Flags().GetString("title")
+		participator, _ := cmd.Flags().GetString("participator")
+
+		switch entity.AddMeetingParticipators(title, participator) {
+		case 0:
+			entity.UpdateLib()
+			log.Printf("User %s participates in meeting %s.", participator, title)
+		case 1:
+			log.Printf("Meeting %s doesn't exit or you are not the sponsor of it.", title)
+		case 2:
+			log.Printf("User %s doesn't exit or he/she has planned to attend another meeting at that time.", participator)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addParticipatorCmd)
+	entity.Init()
+	addParticipatorCmd.Flags().StringP("title", "t", "", "")
+	addParticipatorCmd.Flags().StringP("participator", "p", "", "")
 
 	// Here you will define your flags and configuration settings.
 

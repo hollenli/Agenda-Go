@@ -17,45 +17,35 @@ package cmd
 import (
 	"log"
 
-	entity "github.com/Agenda-Go/entity"
-
+	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
 
 // deleteUserCmd represents the deleteUser command
 var deleteUserCmd = &cobra.Command{
 	Use:   "deleteUser",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Delete you account",
+	Long:  "Usage：agenda deleteUser",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Println("deleteUser called")
 		entity.Init()
 		if entity.GetCurrentUser() == "" {
 			log.Println("Please log in first")
 		} else {
-			log.Println("Delete user " + entity.GetCurrentUser() + " successfully")
-			entity.DeleteUser(entity.GetCurrentUser())
-			entity.DeleteAllMeeting(entity.GetCurrentUser())
-			entity.UpdateLib()
+			flag1 := entity.DeleteAllMeeting(entity.GetCurrentUser())
+			flag2 := entity.DeleteUser(entity.GetCurrentUser())
+			if flag1 == 0 && flag2 {
+				entity.SetCurrentUser("")
+				entity.UpdateLib()
+				log.Println("Delete user " + entity.GetCurrentUser() + " successfully")
+			} else {
+				log.Println("Delete user " + entity.GetCurrentUser() + " failed")
+			}
+
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deleteUserCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deleteUserCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deleteUserCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

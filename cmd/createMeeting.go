@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"log"
+
 	"github.com/Agenda-Go/entity"
 	"github.com/spf13/cobra"
 )
@@ -23,61 +24,56 @@ import (
 // createMeetingCmd represents the createMeeting command
 var createMeetingCmd = &cobra.Command{
 	Use:   "createMeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Create a meeting as a sponsor",
+	Long:  "Usage：agenda createMeeting -t [title]  -p [participator] -s [start]  -e [end]  ",
 	Run: func(cmd *cobra.Command, args []string) {
-		nowUser := entity.GetCurrentUser() 
-		if nowUser== "" {
-			log.Println("create meeting failed , you haven't logged in" )
-		}else{
+		nowUser := entity.GetCurrentUser()
+		if nowUser == "" {
+			log.Println("create meeting failed , you haven't logged in")
+		} else {
 			nowStr := ""
-			var participators []string	
-			t , _:= cmd.Flags().GetString("title") 
-			p , _:= cmd.Flags().GetString("participator") 
-			s , _:= cmd.Flags().GetString("start") 
-			e , _:= cmd.Flags().GetString("end") 
-			for i := 0; i < len(p); i++{
-				if p[i] == ','{
-					participators = append(participators , nowStr)
+			var participators []string
+			t, _ := cmd.Flags().GetString("title")
+			p, _ := cmd.Flags().GetString("participator")
+			s, _ := cmd.Flags().GetString("start")
+			e, _ := cmd.Flags().GetString("end")
+			for i := 0; i < len(p); i++ {
+				if p[i] == ',' {
+					participators = append(participators, nowStr)
 					nowStr = ""
-				}else{
+				} else {
 					nowStr += string(p[i])
 				}
 			}
-			participators = append(participators , nowStr)
-			if !entity.CheckDateValid( entity.StrToDate(s) ){
-				log.Println("start time is not vaild" )
-			}else if !entity.CheckDateValid( entity.StrToDate(e) ){
+			participators = append(participators, nowStr)
+			if !entity.CheckDateValid(entity.StrToDate(s)) {
+				log.Println("start time is not vaild")
+			} else if !entity.CheckDateValid(entity.StrToDate(e)) {
 				log.Println("end time is not valid")
-			}else if s > e{
+			} else if s > e {
 				log.Println("start time must be not bigger than end time")
-			}else if entity.MeetingCheck(t) != -1 {
+			} else if entity.MeetingCheck(t) != -1 {
 				log.Println("the meeting title is repeat")
-			}else{
+			} else {
 				canCreate := true
-				if !entity.CheckUserFreeTime(nowUser, s  , e)  {
+				if !entity.CheckUserFreeTime(nowUser, s, e) {
 					log.Println("sponsor " + nowUser + " have meeting during this period ")
 					canCreate = false
 				}
 				for i := 0; i < len(participators); i++ {
-					if !entity.CheckUserFreeTime(participators[i] , s  , e)  {
-						log.Println("participator " + participators[i] + " have meeting during this period ")
+					if !entity.UsernameCheck(participators[i]) || !entity.CheckUserFreeTime(participators[i], s, e) {
+						log.Println("participator " + participators[i] + " doesn't exit or have meeting during this period ")
 						canCreate = false
 					}
 				}
-				if canCreate{
+				if canCreate {
 					log.Println("create Meeting succesfully ")
-					entity.CreateMeeting(t , nowUser , s , e , participators)
+					entity.CreateMeeting(t, nowUser, s, e, participators)
 					entity.UpdateLib()
 				}
 			}
 		}
-		
+
 	},
 }
 
