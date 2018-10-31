@@ -273,7 +273,7 @@ func AddMeetingParticipators(title string, participator string) int {
 func DeleteMeetingParticipators(t string, player string) int {
 	if UsernameCheck(player) {
 		pos := MeetingCheck(t)
-		if pos == -1 || total_meeting[pos].Sponsor != current_user {
+		if pos == -1  {
 			return 1
 		}
 		if total_meeting[pos].removeParticipator(player) {

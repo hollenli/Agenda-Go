@@ -31,15 +31,24 @@ var deleteParticipatorCmd = &cobra.Command{
 		title, _ := cmd.Flags().GetString("title")
 		parti, _ := cmd.Flags().GetString("participator")
 		entity.Init()
-		p := entity.DeleteMeetingParticipators(title, parti)
-		if p == 0 {
-			log.Println("Delete participator " + parti + " successfully")
-			entity.UpdateLib()
-		} else if p == 1 {
-			log.Println("No meeting or " + parti + " is not a participator")
-		} else {
-			log.Println("No user call " + parti)
+		total_meeting := entity.GetAllMeeting()
+		meetingPos := entity.MeetingCheck(title)
+		if meetingPos == -1  {
+			log.Println("No meeting")
+		}else if total_meeting[meetingPos].Sponsor !=  entity.GetCurrentUser() {
+			log.Println("you are not the sponsor of the meeting")
+		}else{
+			p := entity.DeleteMeetingParticipators(title, parti)
+			if p == 0 {
+				log.Println("Delete participator " + parti + " successfully")
+				entity.UpdateLib()
+			} else if p == 1 {
+				log.Println( parti + " is not a participator")
+			} else {
+				log.Println("No user call " + parti)
+			}
 		}
+		
 
 	},
 }
